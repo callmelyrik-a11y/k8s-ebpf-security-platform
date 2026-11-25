@@ -1,0 +1,26 @@
+name: Offline CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Shell syntax
+        run: |
+          for f in infra/preflight/*.sh; do bash -n "$f" || exit 1; done
+      - name: Render GitOps baseline
+        run: kubectl kustomize gitops/environments/local

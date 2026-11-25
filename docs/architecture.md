@@ -1,0 +1,2 @@
+# Architecture
+Existing HAProxy → existing Kubernetes control plane; existing worker nodes run Docker through their configured CRI. Calico remains primary CNI until approved migration. Existing Argo CD pulls this repository. Security platform lives in security-platform namespace; platform agents may need separately approved system namespace permissions. CI is external, uses no cluster credentials, and future images are distributed through GHCR. PostgreSQL stores CVE and normalized runtime evidence; correlation engine feeds authenticated API and dashboard.
